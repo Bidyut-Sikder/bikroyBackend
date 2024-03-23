@@ -39,7 +39,10 @@ exports.UpdateAdminServices = async (req) => {
 
 
         if (req.file !== undefined) {
-            reqBody.image = `./${req.file.path}`
+            //console.log(req.file)
+          //  reqBody.image = `./src/uploads/${req.file.filename}`
+              reqBody.image = req.file.filename
+            //  reqBody.image = `./${req.file.path}`
         }
         // console.log(reqBody.image)
 
@@ -49,7 +52,8 @@ exports.UpdateAdminServices = async (req) => {
 
 
             if (user.image !== undefined) {
-                fs.unlinkSync(`${user.image}`)
+                fs.unlinkSync(`./src/uploads/${user.image}`)
+               // fs.unlinkSync(`${user.image}`)
             }
 
 

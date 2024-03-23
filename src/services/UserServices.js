@@ -188,7 +188,8 @@ const UpdateProfileServies = async (req) => {
         // console.log(req.file !== undefined)
 
         if (req.file !== undefined) {
-            reqBody.image = `./${req.file.path}`
+          //  reqBody.image = `./${req.file.path}`
+          reqBody.image = req.file.filename
         }
         //  console.log(reqBody.image)
 
@@ -197,7 +198,8 @@ const UpdateProfileServies = async (req) => {
 
 
             if (user.image !== undefined) {
-                fs.unlinkSync(`${user.image}`)
+               // fs.unlinkSync(`${user.image}`)
+               fs.unlinkSync(`./src/uploads/${user.image}`)
             }
 
 

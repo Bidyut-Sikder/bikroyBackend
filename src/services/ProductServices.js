@@ -29,8 +29,9 @@ const ProductCreateService = async (req) => {
 
         let dataObject = {}
         req.files.map((item, i) => {
-
-            dataObject[`img${parseFloat(i) + 1}`] = item.destination + "/" + item.filename
+           // dataObject[`img${parseFloat(i) + 1}`] = item.destination + "/" + item.filename
+            
+            dataObject[`img${parseFloat(i) + 1}`] =  item.filename
 
         })
         dataObject.productID = productID
@@ -95,20 +96,31 @@ const ProductDeleteService = async (req) => {
 
 
         if (deletedProduct.img1) {
-            fs.unlinkSync(`${deletedProduct.img1}`)
+            
+           // fs.unlinkSync(`${deletedProduct.img1}`)
+           
+           fs.unlinkSync(`./src/uploads/${deletedProduct.img1}`)
         }
         if (deletedProduct.img2) {
-            fs.unlinkSync(`${deletedProduct.img2}`)
+           // fs.unlinkSync(`${deletedProduct.img2}`)
+           fs.unlinkSync(`./src/uploads/${deletedProduct.img2}`)
+
         }
 
         if (deletedProduct.img3) {
-            fs.unlinkSync(`${deletedProduct.img3}`)
+           // fs.unlinkSync(`${deletedProduct.img3}`)
+           fs.unlinkSync(`./src/uploads/${deletedProduct.img3}`)
+
         }
         if (deletedProduct.img4) {
-            fs.unlinkSync(`${deletedProduct.img4}`)
+           // fs.unlinkSync(`${deletedProduct.img4}`)
+           fs.unlinkSync(`./src/uploads/${deletedProduct.img4}`)
+
         }
         if (deletedProduct.img5) {
-            fs.unlinkSync(`${deletedProduct.img5}`)
+            //fs.unlinkSync(`${deletedProduct.img5}`)
+           fs.unlinkSync(`./src/uploads/${deletedProduct.img5}`)
+
         }
 
 
@@ -207,7 +219,7 @@ const ProductListBySortService = async (req) => {
 
 
         if (sortingKeyword === 'LowToHigh') {
-            let matchStage = { $match:{ approved: true }}
+            let matchStage = { $match: { approved: true } }
             let projectionStage = {
                 $project: {
                     'numericPrice': 0,
@@ -235,8 +247,8 @@ const ProductListBySortService = async (req) => {
 
         } else if (sortingKeyword === 'HighToLow') {
 
-       
-            let matchStage = { $match:{ approved: true }}
+
+            let matchStage = { $match: { approved: true } }
             let projectionStage = {
                 $project: {
                     'numericPrice': 0,
@@ -254,7 +266,7 @@ const ProductListBySortService = async (req) => {
                 {
                     $sort: { numericPrice: -1 }
                 },
-               
+
                 projectionStage
             ])
 
@@ -264,13 +276,13 @@ const ProductListBySortService = async (req) => {
 
         } else if (sortingKeyword === 'Latest') {
 
-            const data = await ProductModel.find({approved:true}).sort({ createdAt: 1 })
+            const data = await ProductModel.find({ approved: true }).sort({ createdAt: 1 })
 
             return { status: "success", data }
 
         } else if (sortingKeyword === 'Old') {
 
-            const data = await ProductModel.find({approved:true}).sort({ createdAt: -1 })
+            const data = await ProductModel.find({ approved: true }).sort({ createdAt: -1 })
 
             return { status: "success", data }
 
