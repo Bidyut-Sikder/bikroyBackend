@@ -21,9 +21,7 @@ const dataSchema = mongoose.Schema({
     features: { type: String, required: true },
     negotiable: { type: Boolean, default: false, required: true },
     approved: { type: Boolean, default: false, required: true },
-
-
-
+    userID: { type: mongoose.Schema.Types.ObjectId, required: true },
     categoryID: { type: mongoose.Schema.Types.ObjectId, required: true },
     brandID: { type: mongoose.Schema.Types.ObjectId, required: true },
 

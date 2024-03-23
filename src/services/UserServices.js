@@ -1,11 +1,13 @@
 //const ProfileModel = require("../Models/ProfileModel");
+const   mongoose  = require("mongoose");
+const ProductModel = require("../Models/ProductModel");
 const UserModel = require("../Models/UserModel");
 const EmailSend = require("../utility/EmailHelper");
 const { EncodeToken } = require("../utility/TokenHelper");
 const fs = require('fs')
+ //const ObjectId = mongoose.Types.ObjectId()
 
-
-
+ const ObjectId = mongoose.Types.ObjectId;
 
 
 
@@ -100,10 +102,74 @@ const UserLoginServies = async (req) => {
 
 
 
+const UserProductsServies = async (req) => {
+
+
+    let user_id = new ObjectId(req.headers.user_id)
+
+    try {
+      
+
+        let matchStage = { $match: { userID: user_id } }
+        let joinWithBrandStage = { $lookup: { from: 'brands', localField: 'brandID', foreignField: '_id', as: 'brand' } }
+        let joinWithCategoryStage = { $lookup: { from: 'categories', localField: 'categoryID', foreignField: '_id', as: 'category' } }
+        let unwindBrandStage = { $unwind: "$brand" }
+        let unwindCategoryStage = { $unwind: "$category" }
+        let details = { $lookup: { from: 'productdetails', localField: '_id', foreignField: 'productID', as: 'details' } }
+        let unwindDetails = { $unwind: "$details" }
+
+        let projectionStage = {
+            $project: {
+                'categoryID': 0,
+                'brandID': 0,
+                'createdAt': 0,
+                'updatedAt': 0,
+                'category.createdAt': 0,
+                'category.updatedAt': 0,
+                'brand.createdAt': 0,
+                'brand.updatedAt': 0,
+                "approved": 0
+
+            }
+        }
+        let data = await ProductModel.aggregate([
+            matchStage,
+            joinWithBrandStage,
+            joinWithCategoryStage,
+            unwindBrandStage,
+            unwindCategoryStage,
+            projectionStage,
+            details,
+            unwindDetails
+        ])
+        return { status: 'success', data: data }
+    } catch (err) {
+        console.log(err.toString())
+        return { status: "fail", data: err.toString() }
+
+    }
+
+}
 
 
 
 
+const UserProductUpdateService = async (req) => {
+
+
+    try {
+        const productID = req.params.id
+
+
+
+        await ProductModel.updateOne({ _id: productID }, { $set: { ...req.body } })
+
+        return { status: "success", message: 'Updated successfully.' }
+    } catch (err) {
+        return { status: "fail", data: err.toString() }
+
+    }
+}
 
 
 
@@ -135,7 +201,7 @@ const UpdateProfileServies = async (req) => {
             }
 
 
-        } 
+        }
 
         if (reqBody.email !== undefined) {
 
@@ -163,10 +229,21 @@ const UpdateProfileServies = async (req) => {
 
 const ReadProfileServies = async (req) => {
 
+    // try {
+    //     let user_id = req.headers.user_id;
+
+    //     let result = await UserModel.find({ userID: user_id }, { otp: 0 })
+
+    //     return { status: 'success', data: result }
+    // } catch (error) {
+    //     return { status: 'success', message: 'Something went Wrong.' }
+
+    // }
+
     try {
         let user_id = req.headers.user_id;
 
-        let result = await UserModel.find({ userID: user_id }, { otp: 0 })
+        let result = await UserModel.findOne({ _id: user_id })
 
         return { status: 'success', data: result }
     } catch (error) {
@@ -317,7 +394,8 @@ module.exports = {
     UserOTPServies,
     VeryfyOTPLoginServies,
     SaveProfileServies,
-    ReadProfileServies
+    ReadProfileServies,
+    UserProductsServies
 }
 
 

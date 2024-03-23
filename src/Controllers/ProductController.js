@@ -3,18 +3,20 @@ const {
     ProductCreateService,
     BrandListService,
     CategoryListService,
-    SliderListService,
+  
     ListByBrandService,
     ListByCategoryService,
-    ListBySmilierService,
+   
     ListByKeywordService,
-    ListByRemarkService,
+
     DetailsService,
-    ReviewListService,
-    ProductListByFilterService,
+  
+   
     AllProductsListService,
     ProductDeleteService,
-    ProductUpdateService
+    ProductUpdateService,
+    ProductListByTagService,
+    ProductListBySortService
 } = require('../services/ProductServices')
 
 
@@ -66,10 +68,7 @@ exports.ProductCategoryList = async (req, res) => {
     return res.status(200).json(result)
 }
 
-exports.ProductSliderList = async (req, res) => {
-    let result = await SliderListService()
-    return res.status(200).json(result)
-}
+
 exports.ProductListByBrand = async (req, res) => {
     let result = await ListByBrandService(req)
     return res.status(200).json(result)
@@ -78,18 +77,9 @@ exports.ProductListByCategory = async (req, res) => {
     let result = await ListByCategoryService(req);
     return res.status(200).json(result)
 }
-exports.ProductListByRemark = async (req, res) => {
-    let result = await ListByRemarkService(req)
-    return res.status(200).json(result)
-}
 
-exports.ProductListBySmilier = async (req, res) => {
-    let result = await ListBySmilierService(req)
-    return res.status(200).json(result)
-}
-exports.ProductListByKeyword = async (req, res) => {
 
-}
+
 
 exports.ProductDetails = async (req, res) => {
     let result = await DetailsService(req)
@@ -100,13 +90,29 @@ exports.ProductListByKeyword = async (req, res) => {
     let result = await ListByKeywordService(req)
     return res.status(200).json(result)
 }
-exports.ProductReviewList = async (req, res) => {
-    let result = await ReviewListService(req)
+
+
+
+
+
+
+
+
+
+
+
+
+
+exports.ProductListByTag = async (req,res) => {
+    let result=await ProductListByTagService(req)
     return res.status(200).json(result)
 }
 
-exports.ProductListByFilter = async (req,res) => {
-    let result=await ProductListByFilterService(req)
+
+
+
+exports.ProductListBySort = async (req,res) => {
+    let result=await ProductListBySortService(req)
     return res.status(200).json(result)
 }
 
@@ -116,16 +122,7 @@ exports.ProductListByFilter = async (req,res) => {
 
 
 
-
-
-exports.CreateProductReview = async (req, res) => {
-
-}
-
-
-
-
-
+ 
 
 
 

@@ -148,7 +148,7 @@ exports.AdminProductServices = async (req) => {
 
     try {
 
-        const products = await ProductModel.find()
+        const products = await ProductModel.find({ approved: false })
 
         return { status: 'success', data: products }
     } catch (error) {
@@ -165,8 +165,9 @@ exports.AdminProductSaveServices = async (req) => {
     try {
         const productID = req.params.id
 
-        await ProductModel.updateOne({ _id: productID }, { $set: { ...req.body } })
 
+        const data = await ProductModel.updateOne({ _id: productID }, { $set: { ...req.body } })
+        console.log(data)
         return { status: "success", message: 'Updated successfully.' }
     } catch (err) {
         return { status: "fail", data: err.toString() }
