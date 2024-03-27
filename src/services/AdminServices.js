@@ -38,26 +38,26 @@ exports.UpdateAdminServices = async (req) => {
 
 
 
-        if (req.file !== undefined) {
-            //console.log(req.file)
-          //  reqBody.image = `./src/uploads/${req.file.filename}`
-              reqBody.image = req.file.filename
-            //  reqBody.image = `./${req.file.path}`
-        }
-        // console.log(reqBody.image)
+        // if (req.file !== undefined) {
+        //     //console.log(req.file)
+        //   //  reqBody.image = `./src/uploads/${req.file.filename}`
+        //       reqBody.image = req.file.filename
+        //     //  reqBody.image = `./${req.file.path}`
+        // }
+        // // console.log(reqBody.image)
 
-        if (reqBody.image) {
-            const user = await AdminModel.findOne({ _id: user_id })
-
-
-
-            if (user.image !== undefined) {
-                fs.unlinkSync(`./src/uploads/${user.image}`)
-               // fs.unlinkSync(`${user.image}`)
-            }
+        // if (reqBody.image) {
+        //     const user = await AdminModel.findOne({ _id: user_id })
 
 
-        }
+
+        //     if (user.image !== undefined) {
+        //         fs.unlinkSync(`./src/uploads/${user.image}`)
+        //        // fs.unlinkSync(`${user.image}`)
+        //     }
+
+
+        // }
 
         if (reqBody.email !== undefined) {
 
@@ -123,14 +123,12 @@ exports.AdminLoginServies = async (req) => {
         const email = req.params.email;
         const password = req.params.password;
 
-        let code = Math.floor(100000 + Math.random() * 900000)
-        let EmailText = `Your verification code is ${code}`
+       
 
-        let EmailSubject = 'Email verification '
 
-        //  await EmailSend(email, EmailText, EmailSubject)
-
-        const user = await AdminModel.findOne({ email: email, password })
+        const user = await AdminModel.findOne({ email: email,password: password })
+   //console.log(user)
+    //if(user===null) return { status: 'fail', message: 'Invalid email or password.' }
 
         if (user === null) {
             return { status: 'fail', message: 'Invalid email or password.' }

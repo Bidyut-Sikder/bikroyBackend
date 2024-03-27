@@ -19,6 +19,7 @@ exports.UpdateAdmin = async (req, res) => {
 exports.AdminLogin = async (req, res) => {
     const result = await AdminLoginServies(req)
 
+
     if (result['status'] === 'success') {
         //set cookie options
         let cookieOption = {
@@ -27,6 +28,8 @@ exports.AdminLogin = async (req, res) => {
         //set cookie
         res.cookie('token', result['token'], cookieOption)
 
+        return res.status(200).json(result)
+    } else {
         return res.status(200).json(result)
     }
 

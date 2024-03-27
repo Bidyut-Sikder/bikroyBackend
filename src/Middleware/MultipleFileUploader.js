@@ -49,32 +49,6 @@ exports.MultipleFileUploader = (fileName, fileNumber) => {
 
 
 
-
-
-    // const storage = multer.diskStorage({
-    //     destination: (req, file, cd) => {
-
-    //         return cd(null, './src/uploads')
-    //     },
-    //     filename: (req, file, cd) => {
-    //         return cd(null, `${Date.now()}_${file.originalname}`)
-    //     }
-
-
-    // })
-
-    // const upload = multer({ storage })
-
-
-
-
-
-
-
-
-
-
-
     return upload.array(fileName, fileNumber)
     // return 'bidyut'
 

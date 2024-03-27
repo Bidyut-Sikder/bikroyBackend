@@ -13,6 +13,113 @@ const fs = require('fs')
 
 
 
+
+
+
+
+
+
+
+
+// const ProductCreateService = async (req) => {
+
+//   console.log(req)
+
+//     try {
+//         const user_id = req.headers.user_id
+
+//         const reqBody = req.body;
+//         reqBody.userID = user_id
+
+//        // console.log(reqBody)
+//        // console.log(req.body.file[1])
+
+//         let product = await ProductModel.create(reqBody)
+
+//         const productID = product["_id"].toString()
+
+
+
+//        // if (req.files.length <= 3) {
+
+//         let dataObject = {}
+
+
+
+//     //     req.body.file.map((item, i) => {
+//     //          // dataObject[`img${parseFloat(i) + 1}`] = item.destination + "/" + item.filename
+
+//     //        //  console.log(item+`                              bidyt`)
+//     //      dataObject[`img${parseFloat(i) + 1}`] =  item
+//     //    //  dataObject[`img${parseFloat(i) + 1}`] =  item.filename
+
+//     //        })
+
+
+
+//         // req.files.map((item, i) => {
+
+
+//         //dataObject.images=[]
+
+
+//         // dataObject[`img${parseFloat(i) + 1}`] = item.destination + "/" + item.filename
+//         // dataObject[`img${parseFloat(i) + 1}`] =  `data:${item.mimetype};base64,${img.toString('base64')}` ;
+//         //  dataObject[`img${parseFloat(i) + 1}`] =  item.filename
+
+//         //   })
+
+
+//         dataObject.images = reqBody.images
+//         dataObject.productID = productID
+
+//     //console.log(dataObject)
+
+//        await ProductDetailsModel.create(dataObject)
+//         //console.log(dataObject)
+//         // }
+
+
+
+//         // await ProductDetailsModel.create({ productID })
+//         // await ProductDetailsModel.create({ productID,img1:'fdfdafa.com })
+
+//         return { status: "success", message: 'created successfully.' }
+//     } catch (err) {
+//         return { status: "fail", data: err.toString() }
+
+//     }
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////
+
+//using multer
 const ProductCreateService = async (req) => {
 
     try {
@@ -21,20 +128,60 @@ const ProductCreateService = async (req) => {
         const reqBody = req.body;
         reqBody.userID = user_id
 
+        // console.log(req.body.file[1])
+
         let product = await ProductModel.create(reqBody)
 
         const productID = product["_id"].toString()
 
+
+
         // if (req.files.length <= 3) {
 
         let dataObject = {}
-        req.files.map((item, i) => {
-           // dataObject[`img${parseFloat(i) + 1}`] = item.destination + "/" + item.filename
-            
-            dataObject[`img${parseFloat(i) + 1}`] =  item.filename
+
+
+
+        req.body.file.map((item, i) => {
+            // dataObject[`img${parseFloat(i) + 1}`] = item.destination + "/" + item.filename
+
+            //  console.log(item+`                              bidyt`)
+            dataObject[`img${parseFloat(i) + 1}`] = item
+            //  dataObject[`img${parseFloat(i) + 1}`] =  item.filename
 
         })
+
+
+
+
+
+
+
+
+
+
+
+        // req.files.map((item, i) => {
+
+
+        //dataObject.images=[]
+
+
+
+
+
+
+        // dataObject[`img${parseFloat(i) + 1}`] = item.destination + "/" + item.filename
+        // dataObject[`img${parseFloat(i) + 1}`] =  `data:${item.mimetype};base64,${img.toString('base64')}` ;
+        //  dataObject[`img${parseFloat(i) + 1}`] =  item.filename
+
+        //   })
+
+
         dataObject.productID = productID
+
+        //console.log(dataObject)
+
         await ProductDetailsModel.create(dataObject)
         //console.log(dataObject)
         // }
@@ -51,6 +198,55 @@ const ProductCreateService = async (req) => {
     }
 }
 
+//////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+// const ProductCreateService = async (req) => {
+
+//     try {
+//         const user_id = req.headers.user_id
+
+//         const reqBody = req.body;
+//         reqBody.userID = user_id
+
+
+//         let product = await ProductModel.create(reqBody)
+
+//         const productID = product["_id"].toString()
+
+//         // if (req.files.length <= 3) {
+
+//         let dataObject = {}
+//         req.files.map((item, i) => {
+//            // dataObject[`img${parseFloat(i) + 1}`] = item.destination + "/" + item.filename
+
+//             dataObject[`img${parseFloat(i) + 1}`] =  item.filename
+
+//         })
+//         dataObject.productID = productID
+//         await ProductDetailsModel.create(dataObject)
+//         //console.log(dataObject)
+//         // }
+
+
+
+//         // await ProductDetailsModel.create({ productID })
+//         // await ProductDetailsModel.create({ productID,img1:'fdfdafa.com })
+
+//         return { status: "success", message: 'created successfully.' }
+//     } catch (err) {
+//         return { status: "fail", data: err.toString() }
+
+//     }
+// }
 
 
 
@@ -74,7 +270,41 @@ const ProductUpdateService = async (req) => {
 
 
 
-        await ProductModel.updateOne({ _id: productID }, { $set: { ...req.body } })
+
+        const user_id = req.headers.user_id
+
+        
+
+        reqBody.userID = user_id
+
+
+        const product = await ProductModel.findOneAndUpdate({ _id: productID }, { $set: { ...req.body } },{ 
+            returnDocument: "after", 
+            //projection: { _id: 1 }
+          })
+
+          const productId = product["_id"].toString()
+
+
+
+        if (productId) {
+            let dataObject = {}
+            req.body.file.map((item, i) => {
+                dataObject[`img${parseFloat(i) + 1}`] = item
+            })
+            await ProductDetailsModel.updateOne(dataObject)
+        }
+
+      
+
+
+
+      //  dataObject.productID = productID
+
+
+
+       // await ProductDetailsModel.create(dataObject)
+
 
         return { status: "success", message: 'Updated successfully.' }
     } catch (err) {
@@ -84,6 +314,54 @@ const ProductUpdateService = async (req) => {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const ProductUpdateService = async (req) => {
+
+
+//     try {
+//         const productID = req.params.id
+
+//         const reqBody = req.body
+//         if (reqBody.approved) {
+//             return { status: "success", message: 'Something went wrong.' }
+//         }
+
+
+
+//         await ProductModel.updateOne({ _id: productID }, { $set: { ...req.body } })
+
+//         return { status: "success", message: 'Updated successfully.' }
+//     } catch (err) {
+//         return { status: "fail", data: err.toString() }
+
+//     }
+// }
+
+
+
+
+
+
 const ProductDeleteService = async (req) => {
 
 
@@ -91,37 +369,6 @@ const ProductDeleteService = async (req) => {
     try {
 
         const productID = req.params.id
-
-        const deletedProduct = await ProductDetailsModel.findOne({ productID })
-
-
-        if (deletedProduct.img1) {
-            
-           // fs.unlinkSync(`${deletedProduct.img1}`)
-           
-           fs.unlinkSync(`./src/uploads/${deletedProduct.img1}`)
-        }
-        if (deletedProduct.img2) {
-           // fs.unlinkSync(`${deletedProduct.img2}`)
-           fs.unlinkSync(`./src/uploads/${deletedProduct.img2}`)
-
-        }
-
-        if (deletedProduct.img3) {
-           // fs.unlinkSync(`${deletedProduct.img3}`)
-           fs.unlinkSync(`./src/uploads/${deletedProduct.img3}`)
-
-        }
-        if (deletedProduct.img4) {
-           // fs.unlinkSync(`${deletedProduct.img4}`)
-           fs.unlinkSync(`./src/uploads/${deletedProduct.img4}`)
-
-        }
-        if (deletedProduct.img5) {
-            //fs.unlinkSync(`${deletedProduct.img5}`)
-           fs.unlinkSync(`./src/uploads/${deletedProduct.img5}`)
-
-        }
 
 
 
@@ -145,6 +392,96 @@ const ProductDeleteService = async (req) => {
 
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const ProductDeleteService = async (req) => {
+
+
+
+//     try {
+
+//         const productID = req.params.id
+
+//         const deletedProduct = await ProductDetailsModel.findOne({ productID })
+
+
+//         if (deletedProduct.img1) {
+
+
+
+//             // let buff = new Buffer(deletedProduct.img1, 'base64');
+
+//             // const imageName = 
+
+//             // console.log(buff.toString('ascii'))
+//             // fs.unlinkSync(`${deletedProduct.img1}`)
+
+//             fs.unlinkSync(`./src/uploads/${deletedProduct.img1}`)
+//         }
+//         if (deletedProduct.img2) {
+//             // fs.unlinkSync(`${deletedProduct.img2}`)
+//             fs.unlinkSync(`./src/uploads/${deletedProduct.img2}`)
+
+//         }
+
+//         if (deletedProduct.img3) {
+//             // fs.unlinkSync(`${deletedProduct.img3}`)
+//             //  fs.unlinkSync(`./src/uploads/${deletedProduct.img3}`)
+
+//         }
+//         if (deletedProduct.img4) {
+//             // fs.unlinkSync(`${deletedProduct.img4}`)
+//             fs.unlinkSync(`./src/uploads/${deletedProduct.img4}`)
+
+//         }
+//         if (deletedProduct.img5) {
+//             //fs.unlinkSync(`${deletedProduct.img5}`)
+//             fs.unlinkSync(`./src/uploads/${deletedProduct.img5}`)
+
+//         }
+
+
+
+//         await ProductDetailsModel.deleteOne({ productID: productID })
+
+
+//         await ProductModel.deleteOne({ _id: productID })
+
+
+//         // const imgSource = ['img1', 'img2', 'img3', 'img4', 'img5']
+//         // imgSource.map((item, i) => {
+//         //    const res= fs.unlinkSync(`${deletedProduct[item]}`,)
+
+
+
+//         // })
+
+//         return { status: "success", message: 'Deleted successfully.' }
+//     } catch (err) {
+//         return { status: "fail", data: err.toString() }
+
+//     }
+// }
 
 
 
@@ -441,32 +778,7 @@ const ListByKeywordService = async (req) => {
         let SearchQuery = { $or: SearchParams }
 
 
-        // let matchStage = { $match: SearchQuery, approved: true }
-        // let joinWithBrandStage = { $lookup: { from: 'brands', localField: 'brandID', foreignField: '_id', as: 'brand' } }
-        // let joinWithCategoryStage = { $lookup: { from: 'categories', localField: 'categoryID', foreignField: '_id', as: 'category' } }
-        // let unwindBrandStage = { $unwind: "$brand" }
-        // let unwindCategoryStage = { $unwind: "$category" }
-        // let projectionStage = {
-        //     $project: {
-        //         'categoryID': 0,
-        //         'brandID': 0,
-        //         'createdAt': 0,
-        //         'updatedAt': 0,
-        //         'category.createdAt': 0,
-        //         'category.updatedAt': 0,
-        //         'brand.createdAt': 0,
-        //         'brand.updatedAt': 0,
-        //     }
-        // }
-        // let data = await ProductModel.aggregate([
-        //     matchStage,
-        //     // joinWithBrandStage,
-        //     // joinWithCategoryStage,
-        //     // unwindBrandStage,
-        //     // unwindCategoryStage,
-        //     // projectionStage
-
-        // ])
+        
 
         const data = await ProductModel.find(SearchQuery)
 

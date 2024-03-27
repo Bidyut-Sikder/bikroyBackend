@@ -1,6 +1,6 @@
 const express = require('express')
 const { ProductBrandList, ProductCategoryList, ProductListByBrand, ProductListByCategory, ProductListByKeyword, ProductDetails, ProductCreate, AllProductsList, ProductDelete, ProductUpdate, ProductListByTag, ProductListBySort } = require('../Controllers/ProductController')
-const { SignUp, UserLogout, UpdateProfile, ReadProfile, UserLogin, UserProducts } = require('../Controllers/UserController')
+const { SignUp, UserLogout, UpdateProfile, ReadProfile, UserLogin, UserProducts, UserCreateProductsCheck } = require('../Controllers/UserController')
 const { AuthVerification } = require('../Middleware/AuthVerification')
 const multer = require('multer')
 const { MultipleFileUploader } = require('../Middleware/MultipleFileUploader')
@@ -30,7 +30,7 @@ router.get('/ProductListByKeyword/:Keyword', ProductListByKeyword)
 router.get('/ProductDetails/:ProductID', ProductDetails)
 
 
-
+ 
 //product sorting
 router.get('/ProductListsBySort/:sortingKeyword', ProductListBySort)
 
@@ -40,7 +40,7 @@ router.get('/ProductListsBySort/:sortingKeyword', ProductListBySort)
 
 
 
-
+  
 
 
 //User Apis 
@@ -51,10 +51,13 @@ router.post('/ProductCreate', AuthVerification, MultipleFileUploader('file', 5),
 router.get('/UserLogin/:email/:password', UserLogin)
 router.get('/UserLogout/', AuthVerification, UserLogout)
 
+
 router.post('/UpdateUserProfile/', AuthVerification, SingleFileUploader('file'), UpdateProfile)
 router.get('/ReadUserProfile/', AuthVerification, ReadProfile)
 router.get('/UserProducts/', AuthVerification, UserProducts)
-router.get('/UserProductUpdate/:id', AuthVerification, ProductUpdate)
+
+
+router.post('/UserProductUpdate/:id',AuthVerification, MultipleFileUploader('file', 5), ProductUpdate)
 
 
 
@@ -66,7 +69,7 @@ router.get('/ReadAdmin/', AuthVerification, ReadAdmin)
 router.post('/UpdateAdmin/', AuthVerification, SingleFileUploader('file'), UpdateAdmin)
 router.get('/AdminProduct/', AuthVerification, AdminProduct)
 router.get('/AdminProductUpdate/:id', AuthVerification, AdminProductUpdate)
-
+ 
 
 
 // search by tag
@@ -79,22 +82,6 @@ router.get('/ProductListByTag/:district/:subdistrict/:categoryID', ProductListBy
 
 
 module.exports = router;
-
-
-
-
-
-
-///////////////////////
-//
-//
-//
-
-
-
-
-
-
 
 
 

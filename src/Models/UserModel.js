@@ -9,6 +9,8 @@ const dataSchema = mongoose.Schema({
     phone: { type: String },
     password: { type: String },
     image: { type: String },
+    role: { type: String, default: 'User' },
+    age: { type: String },
     otp: { type: String },
 
 
@@ -23,7 +25,7 @@ const UserModel = mongoose.model('users', dataSchema)
 
 module.exports = UserModel;
 
-    
+
 
 
 

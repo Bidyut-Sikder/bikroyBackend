@@ -33,11 +33,11 @@ const limiter = rateLimit({
 app.use(limiter)
 
  
+ 
 
 
-
-mongoose.connect('mongodb://localhost:27017/DemoBikroy')
-  //mongoose.connect("mongodb+srv://bidyutsikder420:bidyutkumar@cluster0.mbahdsf.mongodb.net/CRUD")
+// mongoose.connect('mongodb://localhost:27017/DemoBikroy')
+  mongoose.connect("mongodb+srv://bidyutsikder420:bidyutkumar@cluster0.mbahdsf.mongodb.net/DemoBikroy")
   .then(() => {
     console.log('connected to db')
   })
@@ -47,7 +47,7 @@ mongoose.connect('mongodb://localhost:27017/DemoBikroy')
 
 
 
-//Routing 
+//Routing  
 app.use('/api/v1', router)
 
 

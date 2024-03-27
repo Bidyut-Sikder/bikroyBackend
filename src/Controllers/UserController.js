@@ -1,4 +1,4 @@
-const { SignUpServies, SaveProfileServies, ReadProfileServies, UserLoginServies, UpdateProfileServies, UserProductsServies } = require("../services/UserServices")
+const { SignUpServies, SaveProfileServies, ReadProfileServies, UserLoginServies, UpdateProfileServies, UserProductsServies, UserProdoctCreateCheckServices } = require("../services/UserServices")
 
 
 
@@ -83,6 +83,9 @@ exports.CreateProfile = async (req, res) => {
     res.status(200).json(result)
 
 }
+///////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////
 
 exports.UpdateProfile = async (req, res) => {
     const result = await UpdateProfileServies(req)
