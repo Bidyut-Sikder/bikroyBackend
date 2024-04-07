@@ -1,13 +1,13 @@
 //const ProfileModel = require("../Models/ProfileModel");
-const   mongoose  = require("mongoose");
+const mongoose = require("mongoose");
 const ProductModel = require("../Models/ProductModel");
 const UserModel = require("../Models/UserModel");
 const EmailSend = require("../utility/EmailHelper");
 const { EncodeToken } = require("../utility/TokenHelper");
 const fs = require('fs')
- //const ObjectId = mongoose.Types.ObjectId()
+//const ObjectId = mongoose.Types.ObjectId()
 
- const ObjectId = mongoose.Types.ObjectId;
+const ObjectId = mongoose.Types.ObjectId;
 
 
 
@@ -108,7 +108,7 @@ const UserProductsServies = async (req) => {
     let user_id = new ObjectId(req.headers.user_id)
 
     try {
-      
+
 
         let matchStage = { $match: { userID: user_id } }
         let joinWithBrandStage = { $lookup: { from: 'brands', localField: 'brandID', foreignField: '_id', as: 'brand' } }
@@ -122,25 +122,25 @@ const UserProductsServies = async (req) => {
             $project: {
                 'categoryID': 0,
                 'brandID': 0,
-                'createdAt': 0,
-                'updatedAt': 0,
+                //  'createdAt': 0,
+                //  'updatedAt': 0,
                 'category.createdAt': 0,
                 'category.updatedAt': 0,
-                'brand.createdAt': 0,
-                'brand.updatedAt': 0,
-                "approved": 0
+                // 'brand.createdAt': 0,
+                // 'brand.updatedAt': 0,
+                // "approved": 0
 
             }
         }
         let data = await ProductModel.aggregate([
             matchStage,
-            joinWithBrandStage,
+            // joinWithBrandStage,
             joinWithCategoryStage,
-            unwindBrandStage,
+            // unwindBrandStage,
             unwindCategoryStage,
             projectionStage,
-            details,
-            unwindDetails
+            // details,
+            // unwindDetails
         ])
         return { status: 'success', data: data }
     } catch (err) {
@@ -176,17 +176,17 @@ const UserProductsServies = async (req) => {
 
 
 
-  
- 
+
+
 
 const UpdateProfileServies = async (req) => {
- 
+
     try {
         let user_id = req.headers.user_id;
         let reqBody = req.body
 
-        
- 
+
+
 
         await UserModel.updateOne({ _id: user_id }, { $set: reqBody })
         //  await UserModel.updateOne({ _id: user_id }, { $set: reqBody })
@@ -198,12 +198,12 @@ const UpdateProfileServies = async (req) => {
         return { status: 'fail', message: 'Something went wrong' }
 
 
-    } 
+    }
 
 }
 
 
- 
+
 
 const ReadProfileServies = async (req) => {
 
@@ -211,10 +211,10 @@ const ReadProfileServies = async (req) => {
 
     try {
         let user_id = req.headers.user_id;
-       
+
 
         let result = await UserModel.findOne({ _id: user_id })
- 
+
         return { status: 'success', data: result }
     } catch (error) {
         return { status: 'success', message: 'Something went Wrong.' }
@@ -227,11 +227,69 @@ const ReadProfileServies = async (req) => {
 
 
 
+//UserSingleProductDetailService
+
+
+
+const UserSingleProductDetailService = async (req) => {
+    try {
+        let ProductID = new ObjectId(req.params.id)
+        let matchStage = { $match: { _id: ProductID } }
+
+        let joinWithBrandStage = { $lookup: { from: 'brands', localField: 'brandID', foreignField: '_id', as: 'brand' } }
+        let joinWithCategoryStage = { $lookup: { from: 'categories', localField: 'categoryID', foreignField: '_id', as: 'category' } }
+        let unwindBrandStage = { $unwind: "$brand" }
+        let unwindCategoryStage = { $unwind: "$category" }
+        let details = { $lookup: { from: 'productdetails', localField: '_id', foreignField: 'productID', as: 'details' } }
+        let unwindDetails = { $unwind: "$details" }
+
+        let Userdetails = { $lookup: { from: 'users', localField: 'userID', foreignField: '_id', as: 'user' } }
+        let unwindUserDetails = { $unwind: "$user" }
 
 
 
 
+        let projectionStage = {
+            $project: {
+                'categoryID': 0,
+                'brandID': 0,
 
+
+                'category.createdAt': 0,
+                'category.updatedAt': 0,
+                'brand.createdAt': 0,
+                'brand.updatedAt': 0,
+                "approved": 0,
+                "user.password": 0,
+                "user._id": 0,
+                "user.otp": 0,
+
+
+            }
+        }
+        let data = await ProductModel.aggregate([
+            matchStage,
+
+            // joinWithCategoryStage,
+
+            // unwindCategoryStage,
+
+            //  details,
+            //  unwindDetails,
+            //Userdetails,
+            // unwindUserDetails,
+            // projectionStage
+        ])
+
+
+        return { status: 'success', data: data }
+    } catch (err) {
+        // console.log(err.toString())
+        return { status: "fail", data: err.toString() }
+
+    }
+
+}
 
 
 
@@ -257,7 +315,7 @@ module.exports = {
     UpdateProfileServies,
     SignUpServies,
     UserLoginServies,
-
+    UserSingleProductDetailService,
     ReadProfileServies,
     UserProductsServies
 }

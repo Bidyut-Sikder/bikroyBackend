@@ -1,4 +1,4 @@
-const { SignUpServies, SaveProfileServies, ReadProfileServies, UserLoginServies, UpdateProfileServies, UserProductsServies, UserProdoctCreateCheckServices } = require("../services/UserServices")
+const { SignUpServies, UserSingleProductDetailService,SaveProfileServies, ReadProfileServies, UserLoginServies, UpdateProfileServies, UserProductsServies, UserProdoctCreateCheckServices } = require("../services/UserServices")
 
 
 
@@ -37,9 +37,9 @@ exports.UserLogin = async (req, res) => {
         //set cookie
         res.cookie("token", result['token'], cookieOption)
 
-        res.status(200).json({ result })
+        res.status(200).json( result )
     } else {
-        res.status(200).json({ result })
+        res.status(200).json( result )
     }
 
 }
@@ -67,6 +67,21 @@ exports.UserLogout = async (req, res) => {
 
 
 //UserProductsServies
+
+
+////////////////////////////////////////////////////////
+exports.UserSingleProductDetail = async (req, res) => {
+
+    const result = await UserSingleProductDetailService(req)
+
+
+    res.status(200).json(result)
+
+}
+
+///////////////////////////////////////////////////////
+
+
 
 
 exports.UserProducts = async (req, res) => {

@@ -9,6 +9,7 @@ exports.AuthVerification = async (req, res, next) => {
         token = req.cookies['token']
     }
 
+   // console.log(token)
     
     let decoded =await DecodeToken(token)
       //console.log(decoded)

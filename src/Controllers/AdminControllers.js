@@ -53,7 +53,22 @@ exports.AdminProductUpdate = async (req, res) => {
 
 
 
+exports.AdminLogout = async (req, res) => {
+    try {
+        //set cookie options
+        let cookieOption = {
+            expires: new Date(Date.now() - 24 * 60 * 60 * 1000),
+        }
+        //set cookie
+        res.cookie('token', "", cookieOption)
 
+        return res.status(200).json({ status: 'success' ,message:'logged out successfully.'})
+
+    } catch (error) {
+        return res.status(200).json({ err: error.toString() })
+
+    }
+}
 
 
 

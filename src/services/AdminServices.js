@@ -167,9 +167,9 @@ exports.AdminProductSaveServices = async (req) => {
     try {
         const productID = req.params.id
 
-
+    
         const data = await ProductModel.updateOne({ _id: productID }, { $set: { ...req.body } })
-        console.log(data)
+      //  console.log(data)
         return { status: "success", message: 'Updated successfully.' }
     } catch (err) {
         return { status: "fail", data: err.toString() }
