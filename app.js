@@ -36,8 +36,8 @@ app.use(limiter)
  
 
 
-//mongoose.connect('mongodb://localhost:27017/DemoBikroy')
-  mongoose.connect("mongodb+srv://bidyutsikder420:bidyutkumar@cluster0.mbahdsf.mongodb.net/DemoBikroy")
+mongoose.connect('mongodb://localhost:27017/DemoBikroy')
+  // mongoose.connect("mongodb+srv://bidyutsikder420:bidyutkumar@cluster0.mbahdsf.mongodb.net/DemoBikroy")
   .then(() => {
     console.log('connected to db')
   })
