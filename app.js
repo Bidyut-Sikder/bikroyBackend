@@ -42,7 +42,7 @@ mongoose
     console.log(e);
   });
 
-app.use("/", (req, res) => {
+app.get("/", (req, res) => {
   res.json({
     status: "success",
     message: "Welcome to the API",
