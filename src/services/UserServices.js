@@ -243,8 +243,8 @@ const UserSingleProductDetailService = async (req) => {
 
       // unwindCategoryStage,
 
-      //  details,
-      //  unwindDetails,
+       details,
+       unwindDetails,
       //Userdetails,
       // unwindUserDetails,
       // projectionStage

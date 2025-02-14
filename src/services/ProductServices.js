@@ -410,7 +410,7 @@ const ListByKeywordService = async (req) => {
 const DetailsService = async (req) => {
   try {
     let ProductID = new ObjectId(req.params.ProductID);
-    console.log(ProductID);
+
     let matchStage = { $match: { _id: ProductID, approved: true } };
 
     let joinWithBrandStage = {

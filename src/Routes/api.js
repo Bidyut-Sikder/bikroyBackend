@@ -76,7 +76,7 @@ router.post('/AdminProductUpdate/:id', AuthVerification, AdminProductUpdate)
 
 router.get('/AdminLogout/', AuthVerification, AdminLogout)
 
-
+ 
 // search by tag
 router.get('/ProductListByTag/:district/:subdistrict/:categoryID', ProductListByTag)
 
