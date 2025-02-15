@@ -8,7 +8,7 @@ const hpp = require("hpp");
 const rateLimit = require("express-rate-limit");
 const mongoose = require("mongoose");
 const path = require("path");
-
+require("dotenv").config()
 const router = require("./src/Routes/api");
 
 const app = express();
@@ -32,9 +32,7 @@ app.use(limiter);
 
 // mongoose.connect('mongodb://localhost:27017/DemoBikroy')
 mongoose
-  .connect(
-    "mongodb+srv://bidyutsikder420:bidyutkumar@cluster0.mbahdsf.mongodb.net/DemoBikroy"
-  )
+  .connect(process.env.MONGO_URI)
   .then(() => {
     console.log("connected to db");
   })
